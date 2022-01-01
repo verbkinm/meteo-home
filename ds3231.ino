@@ -4,6 +4,9 @@ void readDS3231()
   month = ds3231.getMonth(century);
   day = ds3231.getDate();
   weekDay = ds3231.getDoW();
+  if(weekDay == 7)
+    weekDay = 0;
+
   hour = ds3231.getHour(h12Flag, pmFlag);
   minute = ds3231.getMinute();
   second = ds3231.getSecond();
