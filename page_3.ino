@@ -34,6 +34,7 @@ void page_3_Draw()
 
 void page_3_Draw_mainText()
 {
+  tft.setTextColor(TFT_COLOR::BLUE, TFT_COLOR::BLACK);
   tft.setTextSize(1);
   tft.setCursor(17, 36);
   tft.print("Enable: ");
@@ -42,7 +43,8 @@ void page_3_Draw_mainText()
     tft.print("on ");
   else
     tft.print("off");
-      
+
+  tft.setTextColor(TFT_COLOR::WHITE, TFT_COLOR::BLACK);
   tft.setTextSize(3);
   tft.setCursor(60, 140);
   if(a1_status_reg & 0x80)
@@ -50,6 +52,7 @@ void page_3_Draw_mainText()
   else
     tft.print("Alarm: --:--");
 
+  tft.setTextColor(TFT_COLOR::BLUE, TFT_COLOR::BLACK);
   tft.setTextSize(1);
   for(uint8_t i = 0; i < 7; i++)
   {     
@@ -59,4 +62,6 @@ void page_3_Draw_mainText()
     else
       tft.print("-");   
   }
+
+  tft.setTextColor(TFT_COLOR::WHITE, TFT_COLOR::BLACK);
 }

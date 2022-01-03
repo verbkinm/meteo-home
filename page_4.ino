@@ -1,7 +1,5 @@
 void page_4_Draw()
 {
-  //    page_4_Clear_Table();
-  //
   tft.setTextSize(0);
   //Сетка
   tft.drawRect(28, 26, 264, 160, TFT_COLOR::GREY);
@@ -68,15 +66,9 @@ void page_4_Draw()
   tft.setTextColor(TFT_COLOR::WHITE, TFT_COLOR::BLACK);
 }
 
-//void page_4_Clear_Table()
-//{
-//  tft.fillRect(28 - 1, 26 - 1, 264 + 2, 160 + 2, TFT_COLOR::BLACK);
-//}
-
 void page_4_Draw_OneHour()
 {
   tft.setTextSize(2);
-  //tft.setCursor(146 - 8 * 5, 7);
   tft.setCursor(320 / 2 - ((4 * 2 * 8 + 8 * 2) / 2) - 10, 7);
   tft.setTextColor(TFT_COLOR::BLUE);
   tft.print("One Hour");
@@ -89,11 +81,7 @@ void page_4_Draw_OneHour()
       {
         if (hourTempLog[j] != 0xFF)
         {
-          tft.drawLine(28 + i * 4.4,
-                       (26 + 16 * 7) - hourTempLog[i] * 3.2,
-                       28 + j * 4.4,
-                       (26 + 16 * 7) - hourTempLog[j] * 3.2,
-                       TFT_COLOR::ORANGE);
+          tft.drawLine(28 + i * 4.4, (26 + 16 * 7) - hourTempLog[i] * 3.2, 28 + j * 4.4, (26 + 16 * 7) - hourTempLog[j] * 3.2, TFT_COLOR::ORANGE);
           i = j;
         }
         else
@@ -110,11 +98,7 @@ void page_4_Draw_OneHour()
       {
         if (hourHumLog[j] != 0xFF)
         {
-          tft.drawLine(28 + i * 4.4,
-                       186 - hourHumLog[i] * 1.6,
-                       28 + j * 4.4,
-                       186 - hourHumLog[j] * 1.6,
-                       TFT_COLOR::WHITEBLUE);
+          tft.drawLine(28 + i * 4.4, 186 - hourHumLog[i] * 1.6, 28 + j * 4.4, 186 - hourHumLog[j] * 1.6, TFT_COLOR::WHITEBLUE);
           i = j;
         }
         else
@@ -123,17 +107,33 @@ void page_4_Draw_OneHour()
     }
   }
 
+  tft.drawLine(28 + minute * 4.4, 26, 28 + minute * 4.4, 185, TFT_COLOR::RED);
+  
   if (hourTempLog[minute] != 0xFF)
-    tft.fillRect(28 + minute * 4.4 - 1, (26 + 16 * 7) - hourTempLog[minute] * 3.2 - 1, 3, 3, TFT_COLOR::ORANGE);
+    tft.fillRect(28 + minute * 4.4 - 2, (26 + 16 * 7) - hourTempLog[minute] * 3.2 - 2, 5, 5, TFT_COLOR::ORANGE);
   if (hourHumLog[minute] != 0xFF)
-    tft.fillRect(28 + minute * 4.4 - 1, 186 - hourHumLog[minute] * 1.6 - 1, 3, 3, TFT_COLOR::WHITEBLUE);
+    tft.fillRect(28 + minute * 4.4 - 2, 186 - hourHumLog[minute] * 1.6 - 2, 5, 5, TFT_COLOR::WHITEBLUE);
 }
 
 void page_4_Draw_Date()
 {
   tft.setTextSize(2);
-  //  tft.setCursor(146 - 14 * 5, 7);
   tft.setCursor(320 / 2 - ((4 * 2 * 14 + 14 * 2) / 2) - 10, 7);
   tft.setTextColor(TFT_COLOR::BLUE);
-  tft.print(String(char(17)) + " 20" + leadingZero(year) + "." + leadingZero(month) + "." + leadingZero(day) + " " + char(16));
+  tft.print(String(char(17)) + " " + dateString() + " " + char(16));
+
+  File file = SD.open("meteo/" + dateStringWithoutDot());
+  if(file)
+  {
+    while (file.available()) 
+    {
+      uint16_t x = static_cast<uint8_t>(file.read()) * 5.5 + 28;
+      int8_t y1 = file.read();  
+      int8_t y2 = file.read();
+
+      tft.fillRect(x - 2, y1 - 2, 5, 5, TFT_COLOR::ORANGE);
+      tft.fillRect(x - 2, y2 - 2, 5, 5, TFT_COLOR::WHITEBLUE);
+    }
+    file.close();
+  }
 }

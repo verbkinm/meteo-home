@@ -18,10 +18,10 @@ void bmpDraw(char *filename, int x, int y)
     
     if((x >= tft.width()) || (y >= tft.height())) return;
     
-    Serial.println();
-    Serial.print("Loading image '");
-    Serial.print(filename);
-    Serial.println('\'');
+//    Serial.println();
+//    Serial.print("Loading image '");
+//    Serial.print(filename);
+//    Serial.println('\'');
     // Open requested file on SD card
     SPCR = spi_save;
     if ((bmpFile = SD.open(filename)) == NULL) 
@@ -123,9 +123,9 @@ void bmpDraw(char *filename, int x, int y)
                     SPCR = 0;
                     tft.pushColors(lcdbuffer, lcdidx, first);
                 } 
-                Serial.print(F("Loaded in "));
-                Serial.print(millis() - startTime);
-                Serial.println(" ms");
+//                Serial.print(F("Loaded in "));
+//                Serial.print(millis() - startTime);
+//                Serial.println(" ms");
             } // end goodBmp
         }
     }

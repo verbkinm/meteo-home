@@ -41,7 +41,7 @@ void page_0_Draw_data()
     tft.setCursor(80, 150);
     if(connection_DS3231)
     {
-      tft.print(weekDays[weekDay] + ". " + leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year));
+      tft.print(weekDays[weekDay] + ". " + dateString());//leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year));
       
       tft.setCursor(320 / 2 - ((4 * pixSize * 5 + 5 * pixSize) / 2) - 10, 240 / 2 - (8 * pixSize) / 2 - 20);
       tft.setTextSize(pixSize);

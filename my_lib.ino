@@ -38,3 +38,29 @@ void draw_statusPanel()
     else
         bmpDraw("dht-off.bmp", 260, 0);
 }
+
+float dht22_values(float arg, int8_t maxValue, int8_t minValue)
+{
+  if(arg > maxValue)
+    arg = maxValue;
+  else if(arg < -minValue)
+    arg = minValue;
+  else if(arg == NAN)
+    arg = 0xFF;
+
+    return arg;
+}
+
+String dateString()
+{
+  return leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year);
+}
+
+String dateStringWithoutDot()
+{
+  String date = dateString();
+  date.remove(2, 1);
+  date.remove(4, 1);
+
+  return date;
+}

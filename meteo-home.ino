@@ -61,7 +61,6 @@ void setup(void)
 
     memset(hourTempLog, 0xFF, 60);
     memset(hourHumLog, 0xFF, 60);
-
     
     TCCR5A = (0 << COM5A1) | (0 << COM5A0) |/* (0 << COM5B0) | (0 << COM5B1) | (0 << COM5C0) | (0 << COM5C0) | */
              (0 << WGM51) | (0 << WGM50);
@@ -70,8 +69,6 @@ void setup(void)
     TCNT5 = 0;
     OCR5A = 0x3D09;
     TIMSK5 = (1 << OCIE5A);
-//  
-//    sei();
 }
 
 void loop(void) 
@@ -87,143 +84,13 @@ void loop(void)
 
   //Выбор страницы - меню
   if(tp.x > 810)
-  {
-      PAGE page = PAGE::HOME;
-      if(tp.y < 940 && tp.y > 875)
-          page = PAGE::HOME;
-      else if(tp.y < 875 && tp.y > 775)
-          page = PAGE::SETTING;
-      else if(tp.y < 775 && tp.y > 680)
-          page = PAGE::CALENDAR;
-      else if(tp.y < 680 && tp.y > 590)
-          page = PAGE::ALARM;
-      else if(tp.y < 590 && tp.y > 505)
-          page = PAGE::DIAGRAM;
-      else if(tp.y < 505 && tp.y > 415)
-          page = PAGE::WIFI;
-//      else if(tp.y < 415 && tp.y > 320)
-//          page = 6;
-//      else if(tp.y < 320 && tp.y > 220)
-//          page = 7;
-      
-      if(page != currentPage)
-      {
-          currentPage = page;
-          menuSelect();
-          pageSelect();
-      }
-  }
+    touch_select_page();
   else if(currentPage == PAGE::SETTING)
-  {
-      if(tp.x > 590 && tp.x < 710 && tp.y < 310 && tp.y > 250)
-      {
-        clearPage();
-        subPage1 = Inc(subPage1, 2, 1);
-      }
-      
-      if(subPage1 == 1)
-      {
-        touch_page_1_1();
-        writeDS3231();
-        page_1_sub_1();
-      }
-      else if(subPage1 == 2)
-      {
-        touch_page_1_2();
-        page_1_sub_2();
-      }
-  }
+    touch_setting_page();
   else if(currentPage == PAGE::ALARM)
-  {
-    if(tp.x > 260 && tp.x < 340 && tp.y < 920 && tp.y > 760)
-    {
-      a1_status_reg ^= 0x80;
-      eeprom_write_byte(A1_REG, a1_status_reg);
-    }
-    else if(tp.x > 340 && tp.x < 500 && (a1_status_reg & 0x80))
-    {
-      if(tp.y < 920 && tp.y > 825)
-      {
-        a1_status_reg ^= 0x01;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-      else if(tp.y < 825 && tp.y > 735)
-      {
-        a1_status_reg ^= 0x02;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-      else if(tp.y < 735 && tp.y > 635)
-      {
-        a1_status_reg ^= 0x04;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-      else if(tp.y < 635 && tp.y > 540)
-      {
-        a1_status_reg ^= 0x08;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-      else if(tp.y < 540 && tp.y > 440)
-      {
-        a1_status_reg ^= 0x10;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-      else if(tp.y < 440 && tp.y > 345)
-      {
-        a1_status_reg ^= 0x20;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-      else if(tp.y < 345 && tp.y > 245)
-      {
-        a1_status_reg ^= 0x40;
-        eeprom_write_byte(A1_REG, a1_status_reg);
-      }
-    }
-    else if(a1_status_reg & 0x80)
-    {
-      //Стрелки вверх для будильника
-      if(tp.x < 605 && tp.x > 525)
-      {
-        if(tp.y < 525 && tp.y > 465)
-        {
-            a1_hour = Inc(a1_hour, 23, 0);
-            eeprom_write_byte(A1_H, a1_hour);
-        }
-        else if(tp.y < 395 && tp.y > 340)
-        {
-            a1_minute = Inc(a1_minute, 59, 0);
-            eeprom_write_byte(A1_M, a1_minute);
-        }
-      }
-      //Стрелки вниз для будильника
-      else if(tp.x < 780 && tp.x > 700)
-      {
-        if(tp.y < 525 && tp.y > 465)
-        {
-            a1_hour = Dec(a1_hour, 23, 0);
-            eeprom_write_byte(A1_H, a1_hour);
-        }
-        else if(tp.y < 395 && tp.y > 340)
-        {
-            a1_minute = Dec(a1_minute, 59, 0);
-            eeprom_write_byte(A1_M, a1_minute);
-        }
-      }
-    }
-    page_3_Draw_mainText();
-  }
+   touch_alarm_page();
   else if(currentPage == PAGE::DIAGRAM)
-  {
-    if(tp.x < 220 && tp.x > 180)
-    {
-      if(tp.y < 705 && tp.y > 440)
-      {
-        subPage4 = Inc(subPage4, 2, 1);
-        clearPage();
-        page_4_Draw();
-      }
-    }
-  }
-
+    touch_diagram_page();
 
   //debug
   tft.setTextSize(0);
@@ -235,6 +102,7 @@ void loop(void)
 MARKER: 
   if(dht22Check)
   {
+    dht22Check = false;
     humidity = dht.readHumidity();
     temperature = dht.readTemperature();
 
@@ -246,24 +114,29 @@ MARKER:
 
       if(dht22Counter60sec)
       {
-        if(temperature > 35)
-          temperature = 35;
-        else if(temperature < -15)
-          temperature = -15;
-        else if(temperature == NAN)
-          temperature = 0xFF;
-
-        if(humidity > 100)
-          humidity = 100;
-        else if(humidity < 0)
-          humidity = 0;
-        else if(humidity == NAN)
-          humidity = 0xFF;
-          
-        hourTempLog[minute] = (int)temperature;
-        hourHumLog[minute] = (int)humidity;
-        
         dht22Counter60sec = false;
+        
+        temperature = dht22_values(temperature, 35, -15);
+        humidity = dht22_values(humidity, 100, 0);
+          
+        hourTempLog[minute] = temperature + 0.5;
+        hourHumLog[minute] = humidity + 0.5;
+        
+        if((minute == 0) || (minute == 30))
+        {
+          File file = SD.open("meteo/" + dateStringWithoutDot(), FILE_WRITE);
+          if(file)
+          {
+            //3600 / 30 = 120
+            //264 / 12 = 22 (пикселя на ячейку)
+            //120 / 30 = 4 (значения на ячейку, 0, 30, 60, 90)
+            //22 / 4 = 5,5 (шаг для 30 минут)
+            file.write((hour * 60 + minute) / 30 );
+            file.write((26 + 16 * 7) - static_cast<int>((temperature + 0.5) * 3.2));
+            file.write(186 - static_cast<int>((humidity + 0.5) * 1.6));
+            file.close();
+          }
+        }
 
         if(currentPage == PAGE::DIAGRAM)
         {
@@ -272,7 +145,6 @@ MARKER:
         }
       }
     }
-    dht22Check = false;
   }
   
   if(ds3231Check)

@@ -22,9 +22,18 @@ void page_1_Draw_data()
 {
     tft.setTextSize(2);
     tft.setCursor(20, 50);
-    tft.print("Date: " + weekDays[weekDay] + ". " + leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year));
-    tft.setCursor(20, 140);
-    tft.print("Time: " + leadingZero(hour) + ":" + leadingZero(minute) + ":" + leadingZero(second));
+    if(connection_DS3231)
+    {
+      tft.print("Date: " + weekDays[weekDay] + ". " + dateString());//leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year));
+      tft.setCursor(20, 140);
+      tft.print("Time: " + leadingZero(hour) + ":" + leadingZero(minute) + ":" + leadingZero(second));
+    }
+    else
+    {
+      tft.print("Date: ---. --.--.----");
+      tft.setCursor(20, 140);
+      tft.print("Time: --:--:--");
+    }
 }
 
 void page_1_sub_1()
