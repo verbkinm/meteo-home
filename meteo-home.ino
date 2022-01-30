@@ -91,10 +91,13 @@ void loop(void)
    touch_alarm_page();
   else if(currentPage == PAGE::DIAGRAM)
     touch_diagram_page();
+  else if(currentPage == PAGE::FEEDING)
+    touch_feeding_page();
 
   //debug
   tft.setTextSize(0);
   tft.setCursor(0, 0);
+  tft.setTextColor(TFT_COLOR::WHITE, TFT_COLOR::BLACK);
   tft.println("tp.x=" + String(tp.x));
   tft.println("tp.y=" + String(tp.y));
   tft.println("tp.z=" + String(tp.z));
@@ -124,7 +127,7 @@ MARKER:
         
         if((minute == 0) || (minute == 30))
         {
-          File file = SD.open("meteo/" + dateStringWithoutDot(), FILE_WRITE);
+          File file = SD.open("meteo/" + dateStringWithoutDot(day, month, year), FILE_WRITE);
           if(file)
           {
             //3600 / 30 = 120
@@ -132,8 +135,8 @@ MARKER:
             //120 / 30 = 4 (значения на ячейку, 0, 30, 60, 90)
             //22 / 4 = 5,5 (шаг для 30 минут)
             file.write((hour * 60 + minute) / 30 );
-            file.write((26 + 16 * 7) - static_cast<int>((temperature + 0.5) * 3.2));
-            file.write(186 - static_cast<int>((humidity + 0.5) * 1.6));
+            file.write((26 + 16 * 7) - static_cast<uint8_t>((temperature + 0.5) * 3.2));
+            file.write(186 - static_cast<uint8_t>((humidity + 0.5) * 1.6));
             file.close();
           }
         }

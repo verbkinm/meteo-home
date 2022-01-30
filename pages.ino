@@ -21,6 +21,9 @@ void pageSelect(void)
     case PAGE::WIFI:
         page_5_Draw();
         break;
+    case PAGE::FEEDING:
+        page_6_Draw();
+        break;
     }
 
     draw_statusPanel();

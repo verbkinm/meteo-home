@@ -24,7 +24,7 @@ void page_1_Draw_data()
     tft.setCursor(20, 50);
     if(connection_DS3231)
     {
-      tft.print("Date: " + weekDays[weekDay] + ". " + dateString());//leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year));
+      tft.print("Date: " + weekDays[weekDay] + ". " + dateString(day, month, year));
       tft.setCursor(20, 140);
       tft.print("Time: " + leadingZero(hour) + ":" + leadingZero(minute) + ":" + leadingZero(second));
     }

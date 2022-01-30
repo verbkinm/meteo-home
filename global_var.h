@@ -2,7 +2,7 @@
 
 uint8_t spi_save;
 PAGE currentPage = PAGE::HOME;
-uint8_t subPage1 = 1, subPage4 = 1;
+uint8_t subPage1 = 1, subPage4 = 1, subPage6 = 1;
 bool connection_WIFI = false;
 bool connection_DS3231 = false;
 bool connection_DHT22 = false;
@@ -14,6 +14,10 @@ uint8_t weekDay;
 uint8_t hour;
 uint8_t minute;
 uint8_t second;
+
+uint8_t list_day;
+uint8_t list_month;
+uint8_t list_year;
 
 bool century = false;
 bool h12Flag;
@@ -37,3 +41,7 @@ int8_t humidity_low, humidity_high;
 bool ds3231Check = false;
 bool dht22Check = false;
 bool dht22Counter60sec = false;
+bool sdCheck = false;
+
+uint8_t page_6_value = 90;
+//uint8_t page_6_total = 0;

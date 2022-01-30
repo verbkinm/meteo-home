@@ -116,24 +116,48 @@ void page_4_Draw_OneHour()
 }
 
 void page_4_Draw_Date()
-{
+{ 
+  if(list_day == 0)
+  {
+    list_day = day;
+    list_month = month;
+    list_year = year;
+  }
+  
   tft.setTextSize(2);
   tft.setCursor(320 / 2 - ((4 * 2 * 14 + 14 * 2) / 2) - 10, 7);
   tft.setTextColor(TFT_COLOR::BLUE);
-  tft.print(String(char(17)) + " " + dateString() + " " + char(16));
+  tft.print(String(char(17)) + " " + dateString(list_day, list_month, list_year) + " " + char(16));
 
-  File file = SD.open("meteo/" + dateStringWithoutDot());
+  File file = SD.open("meteo/" + dateStringWithoutDot(list_day, list_month, list_year));
   if(file)
   {
     while (file.available()) 
     {
-      uint16_t x = static_cast<uint8_t>(file.read()) * 5.5 + 28;
+      uint16_t x1 = static_cast<uint8_t>(file.read()) * 5.5 + 28;
       int8_t y1 = file.read();  
-      int8_t y2 = file.read();
+      uint8_t y2 = file.read();
 
-      tft.fillRect(x - 2, y1 - 2, 5, 5, TFT_COLOR::ORANGE);
-      tft.fillRect(x - 2, y2 - 2, 5, 5, TFT_COLOR::WHITEBLUE);
+      tft.fillRect(x1 - 1, y1 - 1, 3, 3, TFT_COLOR::ORANGE);
+      tft.fillRect(x1 - 1, y2 - 1, 3, 3, TFT_COLOR::WHITEBLUE);
+
+      while (file.available()) 
+      {
+        uint16_t x2 = static_cast<uint8_t>(file.read()) * 5.5 + 28;
+        int8_t y1_2 = file.read();  
+        uint8_t y2_2 = file.read();
+        tft.drawLine(x1, y1, x2, y1_2, TFT_COLOR::ORANGE);
+        tft.drawLine(x1, y2, x2, y2_2, TFT_COLOR::WHITEBLUE);
+        file.seek(file.position() - 3);
+        break;
+      }
     }
     file.close();
+  }
+  else
+  {
+    tft.setCursor(73, 90);
+    tft.setTextColor(TFT_COLOR::RED);
+    tft.print("File not exist!");
   }
 }

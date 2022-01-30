@@ -37,6 +37,11 @@ void draw_statusPanel()
         bmpDraw("dht-on.bmp", 260, 0);
     else
         bmpDraw("dht-off.bmp", 260, 0);
+
+    if(sdCheck)
+        bmpDraw("sd-on.bmp", 240, 0);
+    else
+        bmpDraw("sd-off.bmp", 240, 0);
 }
 
 float dht22_values(float arg, int8_t maxValue, int8_t minValue)
@@ -51,16 +56,44 @@ float dht22_values(float arg, int8_t maxValue, int8_t minValue)
     return arg;
 }
 
-String dateString()
+String dateString(uint8_t day, uint8_t month, uint8_t year)
 {
   return leadingZero(day) + "." + leadingZero(month) + ".20" + leadingZero(year);
 }
 
-String dateStringWithoutDot()
+String dateStringWithoutDot(uint8_t day, uint8_t month, uint8_t year)
 {
-  String date = dateString();
+  String date = dateString(day, month, year);
   date.remove(2, 1);
   date.remove(4, 1);
 
   return date;
+}
+
+void decListDate()
+{
+  uint8_t prevMonth = list_month - 1;
+  if(prevMonth == 0)
+    prevMonth = 12;
+
+  uint8_t maxPrevMonthDay = dayInMonthF(prevMonth - 1);
+  
+  list_day = Dec(list_day, maxPrevMonthDay, 1);
+  if(list_day == maxPrevMonthDay)
+  {
+    list_month = Dec(list_month, 12, 1);
+    if(list_month == 12)
+      list_year = Dec(list_year, 99, 0);
+  }
+}
+
+void incListDate()
+{
+  list_day = Inc(list_day, dayInMonthF(list_month - 1), 1);
+  if(list_day == 1)
+  {
+    list_month = Inc(list_month, 12, 1);
+    if(list_month == 1)
+      list_year = Inc(list_year, 99, 0);
+  } 
 }

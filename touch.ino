@@ -13,10 +13,10 @@ void touch_select_page()
       page = PAGE::DIAGRAM;
   else if(tp.y < 505 && tp.y > 415)
       page = PAGE::WIFI;
-//      else if(tp.y < 415 && tp.y > 320)
-//          page = 6;
-//      else if(tp.y < 320 && tp.y > 220)
-//          page = 7;
+  else if(tp.y < 415 && tp.y > 280)
+      page = PAGE::FEEDING;
+//  else if(tp.y < 320 && tp.y > 220)
+//      page = 7;
   
   if(page != currentPage)
   {
@@ -28,7 +28,7 @@ void touch_select_page()
 
 void touch_setting_page()
 {
-  if(tp.x > 590 && tp.x < 710 && tp.y < 310 && tp.y > 250)
+  if(tp.x > 530 && tp.x < 710 && tp.y < 280 && tp.y > 185)
   {
     clearPage();
     subPage1 = Inc(subPage1, 2, 1);
@@ -128,7 +128,7 @@ void touch_alarm_page()
 
 void touch_diagram_page()
 {
-  if(tp.x < 290 && tp.x > 180)
+  if(tp.x < 290 && tp.x > 155)
   {
     if(tp.y < 705 && tp.y > 440)
     {
@@ -136,113 +136,190 @@ void touch_diagram_page()
       clearPage();
       page_4_Draw();
     }
+    else if(subPage4 == 2) //Сутки
+    {
+      if(tp.y < 800 && tp.y > 705)  
+      {
+        clearPage();
+        decListDate();  
+        page_4_Draw();
+      }
+      else if(tp.y < 400 && tp.y > 330)
+      {
+        clearPage();
+        incListDate();  
+        page_4_Draw();
+      }
+    }
   }  
+}
+
+void touch_feeding_select(uint8_t value)
+{
+  page_6_value = value;
+  page_6_Draw();
+}
+
+void touch_feeding_page()
+{
+  if(subPage6 == 1)
+  {
+    if(tp.x < 380 && tp.x > 200)
+    {
+      if(tp.y < 890 && tp.y > 760)
+        touch_feeding_select(30);
+      else if(tp.y < 700 && tp.y > 580)
+        touch_feeding_select(60);
+      else if(tp.y < 520 && tp.y > 390)
+        touch_feeding_select(90);
+      else if(tp.y < 340 && tp.y > 200)
+        page_6_record();
+    }
+    else if(tp.x < 625 && tp.x > 450)
+    {
+      if(tp.y < 890 && tp.y > 760)
+        touch_feeding_select(120);
+      else if(tp.y < 700 && tp.y > 580)
+        touch_feeding_select(150);
+      else if(tp.y < 520 && tp.y > 390)
+        touch_feeding_select(180);
+      else if(tp.y < 340 && tp.y > 200)
+      {
+        subPage6 = 2;
+        page_6_Draw();
+      }
+    }
+  }
+  else if(subPage6 == 2)
+  {
+    if(tp.x < 290 && tp.x > 155)
+    {
+      if(tp.y < 800 && tp.y > 705)  
+      {
+        clearPage();
+        decListDate();  
+        page_6_Draw();
+      }
+      else if(tp.y < 400 && tp.y > 330)
+      {
+        clearPage();
+        incListDate();  
+        page_6_Draw();
+      }
+    }  
+    else if(tp.x < 740 && tp.x > 240)
+    {
+      subPage6 = 1;
+      clearPage();
+      page_6_Draw();
+    }
+  }
 }
 
 void touch_page_1_1()
 {
   //Стрелки вверх для даты 
-  if(tp.x < 310 && tp.x > 225)
+  if(tp.x < 310 && tp.x > 180)
   {
-    if(tp.y < 735 && tp.y > 670)
+    if(tp.y < 710 && tp.y > 650)
         weekDay = Inc(weekDay, 6, 0);
-    else if(tp.y < 615 && tp.y > 555)
+    else if(tp.y < 590 && tp.y > 510)
         day = Inc(day, dayInMonthF(month - 1), 1);
-    else if(tp.y < 535 && tp.y > 465)
+    else if(tp.y < 490 && tp.y > 430)
     {
         month = Inc(month, 12, 1);
         if(day > dayInMonthF(month - 1))
           day = dayInMonthF(month - 1);
     }
-    else if(tp.y < 430 && tp.y > 360)
+    else if(tp.y < 400 && tp.y > 300)
         year = Inc(year, 99, 0);
   }
   //Стрелки вниз для даты 
-  else if(tp.x < 485 && tp.x > 405)
+  else if(tp.x < 440 && tp.x > 330)
   {
-    if(tp.y < 735 && tp.y > 670)
+    if(tp.y < 710 && tp.y > 650)
         weekDay = Dec(weekDay, 6, 0);
-    else if(tp.y < 615 && tp.y > 555)
+    else if(tp.y < 590 && tp.y > 510)
         day = Dec(day, dayInMonthF(month - 1), 1);
-    else if(tp.y < 535 && tp.y > 465)
+    else if(tp.y < 490 && tp.y > 430)
     {
         month = Dec(month, 12, 1);
         if(day > dayInMonthF(month - 1))
           day = dayInMonthF(month - 1);
     }
-    else if(tp.y < 430 && tp.y > 360)
+    else if(tp.y < 400 && tp.y > 300)
         year = Dec(year, 99, 0);
   }
   //Стрелки вверх для часов
   else if(tp.x < 605 && tp.x > 525)
   {
-    if(tp.y < 750 && tp.y > 685)
+    if(tp.y < 740 && tp.y > 650)
         hour = Inc(hour, 23, 0);
-    else if(tp.y < 670 && tp.y > 610)
+    else if(tp.y < 650 && tp.y > 570)
         minute = Inc(minute, 59, 0);
   }
   //Стрелки вниз для часов
-  else if(tp.x < 780 && tp.x > 700)
+  else if(tp.x < 750 && tp.x > 605)
   {
-    if(tp.y < 750 && tp.y > 685)
+    if(tp.y < 740 && tp.y > 650)
         hour = Dec(hour, 23, 0);
-    else if(tp.y < 780 && tp.y > 610)
+    else if(tp.y < 650 && tp.y > 570)
         minute = Dec(minute, 59, 0);
   }
 }
 void touch_page_1_2()
 {
   //Стрелки вверх для температуры 
-  if(tp.x < 370 && tp.x > 280)
+  if(tp.x < 370 && tp.x > 260)
   {
     if(tp.y < 540 && tp.y > 480)
     {
         temperature_low = Inc(temperature_low, 30, -20);
         eeprom_write_byte(T_LOW, temperature_low);
     }
-    else if(tp.y < 400 && tp.y > 345)
+    else if(tp.y < 380 && tp.y > 285)
     {
         temperature_high = Inc(temperature_high, 30, -20);
         eeprom_write_byte(T_HIGH, temperature_high);
     }
   }
   //Стрелки вниз для температуры 
-  else if(tp.x < 510 && tp.x > 445)
+  else if(tp.x < 505 && tp.x > 415)
   {
     if(tp.y < 540 && tp.y > 480)
     {
         temperature_low = Dec(temperature_low, 30, -20);
         eeprom_write_byte(T_LOW, temperature_low);
     }
-    else if(tp.y < 400 && tp.y > 345)
+    else if(tp.y < 380 && tp.y > 285)
     {
         temperature_high = Dec(temperature_high, 30, -20);
         eeprom_write_byte(T_HIGH, temperature_high);
     }
   }
   //Стрелки вверх для влажности 
-  else if(tp.x < 590 && tp.x > 520)
+  else if(tp.x < 590 && tp.x > 510)
   {
-    if(tp.y < 540 && tp.y > 480)
+    if(tp.y < 520 && tp.y > 440)
     {
         humidity_low = Inc(humidity_low, 100, 0);
         eeprom_write_byte(H_LOW, humidity_low);
     }
-    else if(tp.y < 400 && tp.y > 345)
+    else if(tp.y < 370 && tp.y > 290)
     {
         humidity_high = Inc(humidity_high, 100, 0);
         eeprom_write_byte(H_HIGH, humidity_high);
     }
   }
   //Стрелки вниз для влажности 
-  else if(tp.x < 750 && tp.x > 660)
+  else if(tp.x < 730 && tp.x > 620)
   {
-    if(tp.y < 540 && tp.y > 480)
+    if(tp.y < 520 && tp.y > 440)
     {
         humidity_low = Dec(humidity_low, 100, 0);
         eeprom_write_byte(H_LOW, humidity_low);
     }
-    else if(tp.y < 400 && tp.y > 345)
+    else if(tp.y < 370 && tp.y > 290)
     {
         humidity_high = Dec(humidity_high, 100, 0);
         eeprom_write_byte(H_HIGH, humidity_high);

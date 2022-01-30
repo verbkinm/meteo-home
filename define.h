@@ -26,7 +26,8 @@ enum class PAGE {
            CALENDAR,
            ALARM,
            DIAGRAM,
-           WIFI
+           WIFI,
+           FEEDING
           };
 
 #define A1_REG 0x01
