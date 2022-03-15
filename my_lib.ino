@@ -38,7 +38,7 @@ void draw_statusPanel()
     else
         bmpDraw("dht-off.bmp", 260, 0);
 
-    if(sdCheck)
+    if(connection_SD)
         bmpDraw("sd-on.bmp", 240, 0);
     else
         bmpDraw("sd-off.bmp", 240, 0);

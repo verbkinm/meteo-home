@@ -6,6 +6,7 @@ uint8_t subPage1 = 1, subPage4 = 1, subPage6 = 1;
 bool connection_WIFI = false;
 bool connection_DS3231 = false;
 bool connection_DHT22 = false;
+bool connection_SD = false;
 
 uint8_t year;
 uint8_t month;
@@ -41,7 +42,7 @@ int8_t humidity_low, humidity_high;
 bool ds3231Check = false;
 bool dht22Check = false;
 bool dht22Counter60sec = false;
-bool sdCheck = false;
+//bool sdCheck = false;
 
 uint8_t page_6_value = 90;
 //uint8_t page_6_total = 0;

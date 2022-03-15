@@ -1,3 +1,5 @@
+//Страница настроек будильника
+
 void page_3_Draw()
 {
     tft.setTextSize(2);

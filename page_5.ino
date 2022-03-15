@@ -1,3 +1,5 @@
+//Страница отображения сетевых настроек
+
 void page_5_Draw()
 {
     connection_WIFI = !connection_WIFI;

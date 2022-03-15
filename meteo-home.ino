@@ -35,7 +35,7 @@ void setup(void)
     Serial.begin(9600);
     Wire.begin();
     dht.begin();
-    SD.begin(SD_CS);
+    connection_SD = SD.begin(SD_CS);
     tft.begin(0x9329);
     tft.reset();
     
